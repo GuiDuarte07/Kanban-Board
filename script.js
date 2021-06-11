@@ -71,7 +71,9 @@ const updateObjectList = () => {
     
     const rowNames_li = document.querySelectorAll(`#${column.id} .row-item`);
     rowNames_li.forEach(row => {
-      objList[i].itens.push([row.innerText]);
+      if(!row.classList.contains('invi-row')){
+        objList[i].itens.push([row.innerText]);
+      }
     })
     i++;
   });
@@ -89,6 +91,7 @@ const attAllData = () => {
   if (columnTitleVerify || newItemProgress) return;
   if (dragExecutColumn || dragExecutRow) return;
 
+  verifyAllInviRow();
   attIdOrder();
   attColumnListDrag();
   attColumnTitle();
@@ -103,6 +106,7 @@ const attColumnListDrag = () => {
   //para previnir bugs
   if (dragExecutRow) return;
   mouseIsOver = false;
+
   const prevElement_li = document.createElement('li');
   const dragList_li = document.querySelectorAll('li.column-list');
   
@@ -149,8 +153,7 @@ const attColumnListDrag = () => {
 
     //Evento utilizado para editar a posição do elemento figura.
     column.addEventListener("dragenter", function () {
-      if (!this.classList.contains('column-list')) return;
-
+      //Variáveis para guardar a ordem do elemento do dragenter e do drag
       let thisPosition = 0;
       let prevPosition = 0;
 
@@ -164,6 +167,7 @@ const attColumnListDrag = () => {
         }
       });
       prevElement_li.remove();
+      
       if (prevPosition > thisPosition){
         this.parentNode.insertBefore(prevElement_li, this);
       } else {
@@ -216,28 +220,50 @@ const desativeColumnListDrag = () => {
   }
 }
 
+//Remover as linhas invisivéis das colunas que tem uma linha ou mais real
+const verifyAllInviRow = () => {
+  const dragList_li = document.querySelectorAll('.drag-row');
+
+  for (let column of dragList_li) {
+    if (column.childNodes.length >= 2){
+      column.childNodes.forEach(li => {
+        if (li.classList.contains('invi-row')){
+          li.remove();
+        }
+      })
+    }
+  }
+}
+
 /* ----------------------------------------Drag Funcionality para as linhas (row)-----------------------------------*/
 let prevRowElement_li;
+// Variável que guarda o número da coluna do item no drag
+let attColumnRow;
+//Variável para verificar se na coluna do item no drag existe um elemento invisivel
+let haveInviRow = false;
 
 // When Item Starts Dragging
-function drag(event) {
+function drag(event, column) {
   dragExecutRow = true;
+  attColumnRow = column;
+  haveInviRow = false;
 
   draggedItemRow = event.target;
-  //dragging = true;
-  prevRowElement_li = document.createElement('li');
 
+  prevRowElement_li = document.createElement('li');
   prevRowElement_li.classList.add('row-item');
   prevRowElement_li.classList.add('prev-row');
   prevRowElement_li.style.height = `${draggedItemRow.offsetHeight-10}px`;
   prevRowElement_li.draggable = true;
 
+  //Criação do evento de drop do elemento preview
   prevRowElement_li.addEventListener("dragover", function (event) {
     event.preventDefault();
   });
   prevRowElement_li.addEventListener("drop", function (evt) {
     evt.preventDefault();
     dragExecutRow = false;
+
     const Elposition_li = document.querySelector('.row-item.prev-row');
     if (!Elposition_li) {
       if (!Elposition_li.parentNode) {
@@ -264,11 +290,13 @@ function drag(event) {
 
 // When Item Enters Column Area
 function dragEnter(column, event) {
-  if (!event.target.classList.contains('row-item')) return;
-  if (prevRowElement_li === null) return;
-  if (!event.target) return;
+  //Verificar se a coluna do item em drag já tem uma linha invisivel para poder voltar pra coluna de antes
+  if (!haveInviRow && event.target.parentElement.childNodes.length === 1) {
+    createItemEl('', attColumnRow, true);
+    haveInviRow = true;
+  }
 
-
+  //Variáveis para guardar a ordem do elemento do dragenter e do drag
   let thisPosition = 0;
   let prevPosition = 0;
 
@@ -286,7 +314,6 @@ function dragEnter(column, event) {
   if (prevRowElement_li) {
     prevRowElement_li.remove();
   }
-  
 
   //Existia um bug que criava vários elemento preview, então estou resolvendo dessa forma
   const resolveBugSpan_li = document.querySelectorAll(`#column-${column} .prev-row`);
@@ -296,11 +323,17 @@ function dragEnter(column, event) {
       span.remove();
     })
   }
-  
+  if (event.target.classList.contains('invi-row')){
+    event.target.parentNode.insertBefore(prevRowElement_li, event.target);
+    console.log('invi')
+    return;
+  }
   //Se a prev está maior que a posição do elemento focado, então insere antes, se não, insere depois (nextSibling)
   if (prevPosition > thisPosition){
+    console.log('if')
     event.target.parentNode.insertBefore(prevRowElement_li, event.target);
   } else {
+    console.log('else')
     event.target.parentNode.insertBefore(prevRowElement_li, event.target.nextSibling);
   }
 }
@@ -323,7 +356,7 @@ function dragEnd(column) {
     trashRemove = false;
     return;
   }
-
+  
   //Verificar se existe a row em questão na coluna
   const getAllRow_li = document.querySelectorAll(`#column-${column} .row-item`);
   getAllRow_li.forEach(li => {
@@ -349,7 +382,7 @@ function dragEnd(column) {
 // Criar uma nova coluna de elementos
 const setObjList = (text) => {
   columnIdCount++;
-  columnList_ul.innerHTML += `<li class="column-list" id="column-${columnIdCount}"><span class="column-name">${text}</span><div class="column-div"><ul class="drag-row" onmouseover="desativeColumnListDrag()" onmouseout="attAllData()" ondrop="drop(event, ${columnIdCount})" ondragover="allowDrop(event)" ondragstart="drag(event)"></ul><div class="add-item-container"><span class="plus-sign black-color">+</span><span class="add-item">Add another card</span></div></div></li>`;
+  columnList_ul.innerHTML += `<li class="column-list" id="column-${columnIdCount}"><span class="column-name">${text}</span><div class="column-div"><ul class="drag-row" onmouseover="desativeColumnListDrag()" onmouseout="attAllData()" ondrop="drop(event, ${columnIdCount})" ondragover="allowDrop(event)" ondragstart="drag(event, ${columnIdCount})"></ul><div class="add-item-container"><span class="plus-sign black-color">+</span><span class="add-item">Add another card</span></div></div></li>`;
   attAllData();
 }
 
@@ -388,10 +421,15 @@ function createItemEl(item, index, special) {
   const listEl = document.createElement('li');
   listEl.classList.add('row-item');
   listEl.innerText = item;
-  listEl.setAttribute('onclick', `editRowText(event)`);
   listEl.setAttribute('ondragenter', `dragEnter(${index}, event)`);
   listEl.setAttribute('ondragend', `dragEnd(${index}, event)`);
   listEl.draggable = true;
+  
+  if(special) {
+    listEl.classList.add('invi-row');
+  } else {
+    listEl.setAttribute('onclick', `editRowText(event)`);
+  }
 
   document.querySelector(`#column-${index} .column-div .drag-row`).appendChild(listEl);
 }
@@ -512,6 +550,9 @@ const addObjListData = () => {
       rowIdCount++;
       //Criando nova linha para essa coluna
       createItemEl(item, columnNum);
+    }
+    if (!rowIdCount) {
+      createItemEl('', columnNum, true);
     }
   }
   attAddItems();
@@ -638,7 +679,6 @@ const seeTrashCan = () => {
     attAllData();
   });
 }
-
 
 
 //add list button Functionality

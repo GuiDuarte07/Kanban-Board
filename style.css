@@ -89,10 +89,6 @@ ul {
   cursor: pointer;
 }
 
-.invi-row {
-  opacity: 0;
-  height: 5px;
-}
 /* Estilo para o input que salvará o texto do novo item do usuário */
 .item-text {
   /* Verificar porque o texto não tá correto */
@@ -231,6 +227,13 @@ ul {
   box-shadow: 0 1px 0 rgb(9 30 66 / 25%);
   opacity: .6;
 }
+
+/* Estilo para o item invisivel de colunas vazias */
+.invi-row {
+  opacity: 0;
+  height: 5px;
+}
+
 
 /* Lixeira para remover columas ou linhas */
 .trash-can-container {
