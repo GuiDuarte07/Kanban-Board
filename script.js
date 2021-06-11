@@ -216,22 +216,8 @@ const desativeColumnListDrag = () => {
   }
 }
 
-//Função que permite que colunas vázias recebam linhas
-/* const allowAloneColumnDrop = (ulTarget) => {
-  const allColumnContainer_ul = document.querySelectorAll(`.drag-row`);
-  const teste = e => console.log(e)
-  allColumnContainer_ul.forEach(column_ul => {
-    if (column_ul === ulTarget) return;
-    column_ul.setAttribute('ondragover', 'allowDrop(e)');
-    column_ul.setAttribute('ondragenter', 'teste(e)');
-    console.log('allowcolumnAlone')
-  })
-} */
-
 /* ----------------------------------------Drag Funcionality para as linhas (row)-----------------------------------*/
-
 let prevRowElement_li;
-
 
 // When Item Starts Dragging
 function drag(event) {
@@ -240,9 +226,6 @@ function drag(event) {
   draggedItemRow = event.target;
   //dragging = true;
   prevRowElement_li = document.createElement('li');
-
-  //permitir que colunas vazias também receba a row
-  allowAloneColumnDrop(draggedItemRow.parentElement);
 
   prevRowElement_li.classList.add('row-item');
   prevRowElement_li.classList.add('prev-row');
