@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1 class="main-title">Kanban Board</h1>
+    <!-- Script -->
+
+    <div class="drag-container">
+        <ul class="drag-column">
+            <!-- Where columns and rows will be added -->
+        </ul>
+        <div class="add-new-column">
+            <span class="plus-sign">+</span>
+            <span>Add another list</span>
+        </div>
+        <div class="insertColumnName">
+            <input class="add-list-text" type="text" name="" id="">
+            <div class="add-list-container">
+                <button class="add-list">Add list</button>
+                <button class="add-list cancel">X</button>
+            </div>
+        </div>
+    </div>
+    <div class="focus-screen"></div>
+    <div class="trash-can-container">
+        <img src="./trash can/iconmonstr-trash-can-7.svg" alt="trah can closed" class="trash-can closed"> 
+        <img src="./trash can/iconmonstr-trash-can-13.svg" alt="trah can open" class="trash-can open">
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+
+ <!-- <li class="column-list">
+                <span class="column-name">Column 1</span>
+                <div class="column-div">
+                    <ul class="drag-row">
+                        <li class="row-item">item 1</li>
+                        <li class="row-item">item 2</li>
+                        <li class="row-item">item 3</li>
+                    </ul>
+                    <div class="add-item-container">
+                        <span class="plus-sign black-color">+</span>
+                        <span class="add-item">Add another card</span>
+                    </div>
+                </div>
+            </li> -->

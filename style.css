@@ -1,0 +1,281 @@
+/* Trees Image - Pexels: https://www.pexels.com/photo/photo-of-trees-in-forest-3801030/ */
+@import url("https://fonts.googleapis.com/css?family=Quicksand&display=swap");
+
+html {
+  box-sizing: border-box;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.9rem;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: url("./pexels-jess-bailey-designs-743986.jpg");
+  background-size: cover;
+  background-position: 50% 60%;
+  background-attachment: fixed;
+  color: white;
+  font-family: Quicksand, sans-serif;
+  overflow-y: hidden;
+  height: 100vh;
+}
+
+h1 {
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 5px black;
+}
+
+.main-title {
+  text-align: center;
+  font-size: 3rem;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+
+.drag-container {
+  display: flex;
+  flex-direction: row;
+  height: auto;
+}
+
+.drag-column {
+  display: flex;
+  align-items: flex-start;
+}
+
+.column-list {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  min-width: 250px;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #ebecf0;
+}
+
+.column-name {
+  padding: 0px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  /* font-size: 1rem; */
+  color:black;
+}
+
+/* .drag-row {
+  UL dos itens
+} */
+
+
+.row-item{
+  background-color: rgb(255,255,255);
+  color: black;
+  padding: 5px;
+  margin: 10px 0px;
+  border-radius: 5px;
+  box-shadow: 0 1px 0 rgb(9 30 66 / 25%);
+}
+.row-item:first-child{
+  margin: 0px;
+}
+.row-item:hover {
+  filter: brightness(95%);
+  cursor: pointer;
+}
+
+.invi-row {
+  opacity: 0;
+  height: 5px;
+}
+/* Estilo para o input que salvará o texto do novo item do usuário */
+.item-text {
+  /* Verificar porque o texto não tá correto */
+  margin-top: 10px;
+  line-height: 28px;
+  width: 98%;
+  border-radius: 5px;
+  border:none;
+}
+
+.add-new-column {
+  min-width: 250px;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: rgb(68 76 78 / 0.5);
+  height: 30px;
+  cursor: pointer;
+}
+.add-new-column span {
+  font-weight: bold;
+}
+.plus-sign {
+  font-size: 1.4rem;
+  padding: 0 2px;
+}
+
+.insertColumnName {
+  display: none;
+  flex-direction: column;
+  min-width: 250px;
+  height: 80px;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #ebecf0;
+  gap: 10px;
+}
+.add-list-text {
+  height: 25px;
+  border-radius: 3px;
+  border: 1px solid #0079bf;
+}
+.add-list-container {
+  display: flex;
+  width: 100%;
+}
+.add-list {
+  z-index: 1;
+  font-size: 1rem;
+  background-color: #0079bf;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  height: 35px;
+  width: 80px;
+  cursor: pointer;
+}
+.cancel {
+  font-size: 1.8rem;
+  background-color: inherit;
+  color: black;
+  height: 35px;
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Estilo dos elementos de adcionar novas rows */
+.add-item-container {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.add-item-container:hover {
+  border-radius: 5px;
+  background-color: rgba(78, 76, 76, 0.1);
+  cursor: pointer;
+}
+.add-item{
+  color:rgb(78, 76, 76);
+  padding: 0 5px;
+}
+.black-color {
+  color:rgb(78, 76, 76);
+ margin-bottom: 5px;
+ margin-left: 10px;
+}
+
+/* Estilo do input que recebe o titulo de cada coluna */
+.column-Title {
+  margin-bottom: 5px;
+  border-radius: 5px;
+  padding: 5px 0;
+}
+
+/* Tela de destaque para quando clicar em editar texto da row */
+.focus-screen {
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  background: rgba(0,0,0,.6);
+  bottom: 0;
+  color: #fff;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 10;
+}
+
+/* Area de texto que vai armazenar a alteração de texto da row */
+.edit-row {
+  font-size: 1.2rem;
+  position: relative;
+  resize: none;
+  height: 100px;
+  width: 245px;
+  border-radius: 5px;
+}
+
+/* Estilo do elemento usado para destacar o local onde o item que está sendo arrastado ficará */
+.prev {
+  display: flex;
+  flex-direction: column;
+  min-width: 250px;
+  background-color: rgba(0,0,0,.3);
+}
+
+/* Estilo para a previa da row */
+.prev-row{
+  background-color: rgba(0,0,0, .3);
+  box-shadow: 0 1px 0 rgb(9 30 66 / 25%);
+}
+
+/* Lixeira para remover columas ou linhas */
+.trash-can-container {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+
+  height: 150px;
+  width: 150px;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+.trash-can-container img{
+  display: none;
+  width: 50px;
+  height: 50px;
+  pointer-events: none;
+}
+
+
+
+
+
+/* Media Query: Laptop */
+@media screen and (max-width: 1800px) {
+  .main-title {
+    font-size: 2rem;
+  }
+}
+
+/* Media Query: Large Smartphone (Vertical) */
+@media screen and (max-width: 600px) {
+  body {
+    overflow-y: auto;
+  }
+
+  .drag-container {
+    margin: 0;
+  }
+
+  .drag-list {
+    display: block;
+  }
+
+  .drag-column {
+    margin: 10px;
+  }
+}
