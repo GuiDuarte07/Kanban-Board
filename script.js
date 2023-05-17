@@ -474,16 +474,17 @@ const editNewAddItem = (event) => {
   //Funcionalidade do botão de add
   addItemBtn.addEventListener('click', () => {
     let i = 0;
-    const columnId = event.path;
+    let columnId = event.target.parentElement;
+    console.log(event.composedPath())
     const numRegex = /\d+/;
     const text = saveInfo.value;
     if (text === '') return;
     //Executa a função createItemEl usando como parâmetros o texto guardado no textarea e o número do id da coluna
     //Como só queremos a parte númerica do id (column-1 => 1), então usamos o match com regex numérico
-    while (columnId[i].id === ''){
-      i++;
+    while (columnId.id === ''){
+      columnId = columnId.parentElement;
     }
-    createItemEl(text, columnId[i].id.match(numRegex)[0]);
+    createItemEl(text, columnId.id.match(numRegex)[0]);
     saveInfo.remove();
     addItemContainer.remove();
     newItemProgress = false;
